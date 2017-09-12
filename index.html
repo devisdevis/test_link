@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css">
+        <link rel="stylesheet" href="css/MarkerCluster.css">
+        <link rel="stylesheet" href="css/MarkerCluster.Default.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
+        <link rel="stylesheet" href="css/Control.OSMGeocoder.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet-svg-shape-markers.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/Control.OSMGeocoder.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/leaflet.markercluster.js"></script>
+        <script src="js/leaflet-search.js"></script>
+        <script src="data/ClimaticszonesNigeria0.js"></script>
+        <script src="data/Nimetstations1.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+            highlightLayer.openPopup();
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[4.04667503834,0.947214973506],[14.1321398497,16.3976315135]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.addAttribution('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a>');
+        var measureControl = new L.Control.Measure({
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        var bounds_group = new L.featureGroup([]);
+        var basemap0 = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+            maxZoom: 28
+        });
+        basemap0.addTo(map);
+        function setBounds() {
+            map.setMaxBounds(map.getBounds());
+        }
+        function pop_ClimaticszonesNigeria0(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ID_0'] !== null ? Autolinker.link(String(feature.properties['ID_0'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ISO'] !== null ? Autolinker.link(String(feature.properties['ISO'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAME_0'] !== null ? Autolinker.link(String(feature.properties['NAME_0'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OBJECTID_1'] !== null ? Autolinker.link(String(feature.properties['OBJECTID_1'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ISO3'] !== null ? Autolinker.link(String(feature.properties['ISO3'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAME_ENGLI'] !== null ? Autolinker.link(String(feature.properties['NAME_ENGLI'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAME_ISO'] !== null ? Autolinker.link(String(feature.properties['NAME_ISO'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAME_FAO'] !== null ? Autolinker.link(String(feature.properties['NAME_FAO'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAME_LOCAL'] !== null ? Autolinker.link(String(feature.properties['NAME_LOCAL'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAME_OBSOL'] !== null ? Autolinker.link(String(feature.properties['NAME_OBSOL'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAME_VARIA'] !== null ? Autolinker.link(String(feature.properties['NAME_VARIA'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAME_NONLA'] !== null ? Autolinker.link(String(feature.properties['NAME_NONLA'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAME_FRENC'] !== null ? Autolinker.link(String(feature.properties['NAME_FRENC'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAME_SPANI'] !== null ? Autolinker.link(String(feature.properties['NAME_SPANI'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAME_RUSSI'] !== null ? Autolinker.link(String(feature.properties['NAME_RUSSI'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAME_ARABI'] !== null ? Autolinker.link(String(feature.properties['NAME_ARABI'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAME_CHINE'] !== null ? Autolinker.link(String(feature.properties['NAME_CHINE'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['WASPARTOF'] !== null ? Autolinker.link(String(feature.properties['WASPARTOF'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CONTAINS'] !== null ? Autolinker.link(String(feature.properties['CONTAINS'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SOVEREIGN'] !== null ? Autolinker.link(String(feature.properties['SOVEREIGN'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ISO2'] !== null ? Autolinker.link(String(feature.properties['ISO2'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['WWW'] !== null ? Autolinker.link(String(feature.properties['WWW'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['FIPS'] !== null ? Autolinker.link(String(feature.properties['FIPS'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ISON'] !== null ? Autolinker.link(String(feature.properties['ISON'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['VALIDFR'] !== null ? Autolinker.link(String(feature.properties['VALIDFR'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['VALIDTO'] !== null ? Autolinker.link(String(feature.properties['VALIDTO'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['POP2000'] !== null ? Autolinker.link(String(feature.properties['POP2000'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SQKM'] !== null ? Autolinker.link(String(feature.properties['SQKM'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['POPSQKM'] !== null ? Autolinker.link(String(feature.properties['POPSQKM'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['UNREGION1'] !== null ? Autolinker.link(String(feature.properties['UNREGION1'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['UNREGION2'] !== null ? Autolinker.link(String(feature.properties['UNREGION2'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['DEVELOPING'] !== null ? Autolinker.link(String(feature.properties['DEVELOPING'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CIS'] !== null ? Autolinker.link(String(feature.properties['CIS'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Transition'] !== null ? Autolinker.link(String(feature.properties['Transition'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OECD'] !== null ? Autolinker.link(String(feature.properties['OECD'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['WBREGION'] !== null ? Autolinker.link(String(feature.properties['WBREGION'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['WBINCOME'] !== null ? Autolinker.link(String(feature.properties['WBINCOME'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['WBDEBT'] !== null ? Autolinker.link(String(feature.properties['WBDEBT'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['WBOTHER'] !== null ? Autolinker.link(String(feature.properties['WBOTHER'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CEEAC'] !== null ? Autolinker.link(String(feature.properties['CEEAC'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CEMAC'] !== null ? Autolinker.link(String(feature.properties['CEMAC'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CEPLG'] !== null ? Autolinker.link(String(feature.properties['CEPLG'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['COMESA'] !== null ? Autolinker.link(String(feature.properties['COMESA'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['EAC'] !== null ? Autolinker.link(String(feature.properties['EAC'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ECOWAS'] !== null ? Autolinker.link(String(feature.properties['ECOWAS'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['IGAD'] !== null ? Autolinker.link(String(feature.properties['IGAD'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['IOC'] !== null ? Autolinker.link(String(feature.properties['IOC'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['MRU'] !== null ? Autolinker.link(String(feature.properties['MRU'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SACU'] !== null ? Autolinker.link(String(feature.properties['SACU'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['UEMOA'] !== null ? Autolinker.link(String(feature.properties['UEMOA'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['UMA'] !== null ? Autolinker.link(String(feature.properties['UMA'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['PALOP'] !== null ? Autolinker.link(String(feature.properties['PALOP'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['PARTA'] !== null ? Autolinker.link(String(feature.properties['PARTA'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CACM'] !== null ? Autolinker.link(String(feature.properties['CACM'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['EurAsEC'] !== null ? Autolinker.link(String(feature.properties['EurAsEC'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Agadir'] !== null ? Autolinker.link(String(feature.properties['Agadir'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SAARC'] !== null ? Autolinker.link(String(feature.properties['SAARC'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ASEAN'] !== null ? Autolinker.link(String(feature.properties['ASEAN'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAFTA'] !== null ? Autolinker.link(String(feature.properties['NAFTA'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['GCC'] !== null ? Autolinker.link(String(feature.properties['GCC'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CSN'] !== null ? Autolinker.link(String(feature.properties['CSN'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CARICOM'] !== null ? Autolinker.link(String(feature.properties['CARICOM'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['EU'] !== null ? Autolinker.link(String(feature.properties['EU'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CAN'] !== null ? Autolinker.link(String(feature.properties['CAN'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ACP'] !== null ? Autolinker.link(String(feature.properties['ACP'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Landlocked'] !== null ? Autolinker.link(String(feature.properties['Landlocked'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['AOSIS'] !== null ? Autolinker.link(String(feature.properties['AOSIS'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SIDS'] !== null ? Autolinker.link(String(feature.properties['SIDS'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Islands'] !== null ? Autolinker.link(String(feature.properties['Islands'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['LDC'] !== null ? Autolinker.link(String(feature.properties['LDC'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ClimZone'] !== null ? Autolinker.link(String(feature.properties['ClimZone'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent);
+        }
+
+        function style_ClimaticszonesNigeria0_0(feature) {
+            switch(feature.properties['ClimZone'].toString()) {
+                case 'Coastal':
+                    return {
+                pane: 'pane_ClimaticszonesNigeria0',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 3.0, 
+                fillOpacity: 1,
+                fillColor: 'rgba(30,81,10,1.0)',
+            }
+                    break;
+                case 'Guinea Savannah':
+                    return {
+                pane: 'pane_ClimaticszonesNigeria0',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 3.0, 
+                fillOpacity: 1,
+                fillColor: 'rgba(53,221,15,1.0)',
+            }
+                    break;
+                case 'Sahel':
+                    return {
+                pane: 'pane_ClimaticszonesNigeria0',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 3.0, 
+                fillOpacity: 1,
+                fillColor: 'rgba(236,44,18,1.0)',
+            }
+                    break;
+                case 'Sudan Savannah':
+                    return {
+                pane: 'pane_ClimaticszonesNigeria0',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 3.0, 
+                fillOpacity: 1,
+                fillColor: 'rgba(59,201,92,1.0)',
+            }
+                    break;
+                case 'Tropical Rainforest':
+                    return {
+                pane: 'pane_ClimaticszonesNigeria0',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 3.0, 
+                fillOpacity: 1,
+                fillColor: 'rgba(25,100,17,1.0)',
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_ClimaticszonesNigeria0');
+        map.getPane('pane_ClimaticszonesNigeria0').style.zIndex = 400;
+        map.getPane('pane_ClimaticszonesNigeria0').style['mix-blend-mode'] = 'normal';
+    var layer_ClimaticszonesNigeria0 = new L.geoJson(json_ClimaticszonesNigeria0, {
+        attribution: '<a href=""></a>',
+        pane: 'pane_ClimaticszonesNigeria0',
+        onEachFeature: pop_ClimaticszonesNigeria0,
+        style: style_ClimaticszonesNigeria0_0,
+    });
+        bounds_group.addLayer(layer_ClimaticszonesNigeria0);
+        map.addLayer(layer_ClimaticszonesNigeria0);
+        function pop_Nimetstations1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ID'] !== null ? Autolinker.link(String(feature.properties['ID'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Station'] !== null ? Autolinker.link(String(feature.properties['Station'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Latitude'] !== null ? Autolinker.link(String(feature.properties['Latitude'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Longitude'] !== null ? Autolinker.link(String(feature.properties['Longitude'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Elevation (m)'] !== null ? Autolinker.link(String(feature.properties['Elevation (m)'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent);
+        }
+
+        function style_Nimetstations1_0() {
+            return {
+                pane: 'pane_Nimetstations1',
+                radius: 9.2,
+                opacity: 1,
+                color: 'rgba(14,25,238,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fillOpacity: 1,
+                fillColor: 'rgba(12,13,18,1.0)',
+            }
+        }
+        map.createPane('pane_Nimetstations1');
+        map.getPane('pane_Nimetstations1').style.zIndex = 401;
+        map.getPane('pane_Nimetstations1').style['mix-blend-mode'] = 'normal';
+        var layer_Nimetstations1 = new L.geoJson(json_Nimetstations1, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_Nimetstations1',
+            onEachFeature: pop_Nimetstations1,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_Nimetstations1_0(feature));
+            },
+        });
+        var cluster_Nimetstations1 = new L.MarkerClusterGroup({showCoverageOnHover: false});
+        cluster_Nimetstations1.addLayer(layer_Nimetstations1);
+
+        bounds_group.addLayer(layer_Nimetstations1);
+        cluster_Nimetstations1.addTo(map);
+        var osmGeocoder = new L.Control.OSMGeocoder({
+            collapsed: false,
+            position: 'topright',
+            text: 'Search',
+        });
+        osmGeocoder.addTo(map);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/Nimetstations1.png" /> Nimet_stations': cluster_Nimetstations1,'Climatics_zones_Nigeria<br /><table><tr><td style="text-align: center;"><img src="legend/ClimaticszonesNigeria0_Coastal0.png" /></td><td>Coastal</td></tr><tr><td style="text-align: center;"><img src="legend/ClimaticszonesNigeria0_GuineaSavannah1.png" /></td><td>Guinea Savannah</td></tr><tr><td style="text-align: center;"><img src="legend/ClimaticszonesNigeria0_Sahel2.png" /></td><td>Sahel</td></tr><tr><td style="text-align: center;"><img src="legend/ClimaticszonesNigeria0_SudanSavannah3.png" /></td><td>Sudan Savannah</td></tr><tr><td style="text-align: center;"><img src="legend/ClimaticszonesNigeria0_TropicalRainforest4.png" /></td><td>Tropical Rainforest</td></tr></table>': layer_ClimaticszonesNigeria0,}).addTo(map);
+        setBounds();
+        var i = 0;
+        layer_ClimaticszonesNigeria0.eachLayer(function(layer) {
+            layer.bindTooltip((layer.feature.properties['ClimZone'] !== null?String('<div style="color: #000000; font-size: 14pt; font-weight: bold; font-family: \'Times New Roman\', sans-serif;">' + layer.feature.properties['ClimZone']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_ClimaticszonesNigeria0'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        var i = 0;
+        layer_Nimetstations1.eachLayer(function(layer) {
+            layer.bindTooltip((layer.feature.properties['Station'] !== null?String('<div style="color: #000000; font-size: 11pt; font-weight: bold; font-style: italic; font-family: \'Ubuntu\', sans-serif;">' + layer.feature.properties['Station']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Nimetstations1'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        map.addControl(new L.Control.Search({
+            layer: cluster_Climatics_zones_Nigeria0,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'ClimZone'}));
+        resetLabels([layer_Nimetstations0,layer_Nimetstations1]);
+        map.on("zoomend", function(){
+            resetLabels([layer_Nimetstations0,layer_Nimetstations1]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_Nimetstations0,layer_Nimetstations1]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_Nimetstations0,layer_Nimetstations1]);
+        });
+        </script>
+    </body>
+</html>
